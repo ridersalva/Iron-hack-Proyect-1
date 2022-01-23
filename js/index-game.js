@@ -57,7 +57,7 @@ const gameIronHackDiver = {
             this.createEnemy()
             this.clearEnemy()
             // this.clearBackGround()
-            //this.isCollision() ? this.gameOver() : null
+            this.isCollision() ? this.gameOver() : null
 
         }, 1000 / this.FPS)
 
@@ -131,19 +131,18 @@ const gameIronHackDiver = {
         console.log(`clear2`)
     },
 
-    // isCollision() {
-    //     const enemyArrLevel1 = this.enemyLevel1;
-    //     const enemyArrLevel2 = this.enemyLevel2 
-    //     const allEnemies = [...this.enemyLevel1, ...this.enemyLevel2];
-    //     return allEnemies.some(elm => {
-    //         return (
-    //             this.player.playerPos.x + this.player.playerSize.w >= elm.enemyPos.x &&
-    //             this.player.playerPos.y + this.player.playerSize.h >= elm.enemyPos.y &&
-    //             this.player.playerPos.x <= elm.enemyPos.x + elm.enemySize.w &&
-    //             this.player.playerPos.y <= elm.enemyPos.y + elm.enemySize.h
-    //         )
-    //     })
-    // },
+    isCollision() {
+  
+        const allEnemies = [...this.enemyLevel1, ...this.enemyLevel2];
+        return allEnemies.some(elm => {
+            return (
+                this.player.playerPos.x + this.player.playerSize.w >= elm.enemyPos.x &&
+                this.player.playerPos.y + this.player.playerSize.h >= elm.enemyPos.y &&
+                this.player.playerPos.x <= elm.enemyPos.x + elm.enemySize.w &&
+                this.player.playerPos.y <= elm.enemyPos.y + elm.enemySize.h
+            )
+        })
+    },
 
     gameOver(){
         clearInterval(this.interval)
