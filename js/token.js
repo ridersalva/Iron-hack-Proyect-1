@@ -32,8 +32,6 @@ class Token {
         this.checkCollision()
     }
 
-    checkCollision() {
-
-    }
+    //checkCollision() {}
 
 }

@@ -10,6 +10,7 @@ class Player {
         this.keys = keys
         this.attackOne = 0
         this.attackTwo = []
+        
         //  this.imageInstance.frames=3
         //this.Image.frameIndex = 0
         // this.playerPos.x = 0// Por comentar, se puede colocar el dato en la instancia de game

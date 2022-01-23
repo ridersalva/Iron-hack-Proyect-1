@@ -48,7 +48,7 @@ const gameIronHackDiver = {
     start() {
 
         this.reset()
-        setInterval(() => {
+        this.interval = setInterval(() => {
             this.framesCounter > 5000 ? this.framesCounter = 0 : this.framesCounter++
             
             this.clearAll()
@@ -57,7 +57,7 @@ const gameIronHackDiver = {
             this.createEnemy()
             this.clearEnemy()
             // this.clearBackGround()
-
+            //this.isCollision() ? this.gameOver() : null
 
         }, 1000 / this.FPS)
 
@@ -101,11 +101,11 @@ const gameIronHackDiver = {
         const framesLimitLevel2 = (Math.floor(Math.random() * 10))*30;  
         
         if (this.framesCounter % framesLimitLevel1 === 0) {
-            this.enemyLevel1.push(new Enemy(this.ctx, x, 600, 80, 130, imgUrlA, this.canvasSize,null,50))
+            this.enemyLevel1.push(new Enemy(this.ctx, x, 600, 80, 130, imgUrlA, this.canvasSize,null,10))
         }
 
         if (this.framesCounter % framesLimitLevel2 === 0) {
-            this.enemyLevel2.push(new Enemy(this.ctx, x, 300, 80, 130, imgUrlB, this.canvasSize,null,10))
+            this.enemyLevel2.push(new Enemy(this.ctx, x, 300, 80, 130, imgUrlB, this.canvasSize,null,60))
         }
 
         // const level1y = 600;
@@ -130,6 +130,27 @@ const gameIronHackDiver = {
         this.ctx.clearRect(0, 0, this.canvasSize.w, this.canvasSize.h)
         console.log(`clear2`)
     },
+
+    // isCollision() {
+    //     const enemyArrLevel1 = this.enemyLevel1;
+    //     const enemyArrLevel2 = this.enemyLevel2 
+    //     const allEnemies = [...this.enemyLevel1, ...this.enemyLevel2];
+    //     return allEnemies.some(elm => {
+    //         return (
+    //             this.player.playerPos.x + this.player.playerSize.w >= elm.enemyPos.x &&
+    //             this.player.playerPos.y + this.player.playerSize.h >= elm.enemyPos.y &&
+    //             this.player.playerPos.x <= elm.enemyPos.x + elm.enemySize.w &&
+    //             this.player.playerPos.y <= elm.enemyPos.y + elm.enemySize.h
+    //         )
+    //     })
+    // },
+
+    gameOver(){
+        clearInterval(this.interval)
+    },
+
+
+
     //EVENT
   //  setEventListeners() {
     //    document.onkeydown = e => e.code === this.keys.SPACE ? this.createEnemy() : null
