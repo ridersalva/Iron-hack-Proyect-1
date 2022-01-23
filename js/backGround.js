@@ -6,7 +6,7 @@ class Background {
         this.gameSize = gameSize
         this.backGroundPos.x = 0;
         this.backGroundPos.y = 0;
-        this.backGroundVelX = 10;
+        this.backGroundVelX = 5;
         this.backGroundSize = { w: backGroundWidth, h: backGroundHeight }
         this.imageInstance = undefined,
         

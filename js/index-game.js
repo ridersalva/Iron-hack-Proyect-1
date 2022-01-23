@@ -5,24 +5,20 @@ const gameIronHackDiver = {
     version: '1.0.0',
     canvasDom: undefined,
     ctx: undefined,
-    fps: 60,
+    FPS: 60,
     framesCounter: 0,
-    enemyLevel1: [],
-    enemyLevel2:[],
-  
-   // keys: {
-     // SPACE: 'enter'
-    //},
-    //backGround: [],
-    //backGround: 0,
+    backGround: undefined,
     player: undefined,
+    enemyLevel1:[],
+    enemyLevel2:[],
     canvasSize: {
         w: undefined,
         h: undefined
     },
-
-
-
+   // keys: {
+     // SPACE: 'enter'
+    //},
+  
 
     //INICIALIZACION
     init() {
@@ -53,28 +49,28 @@ const gameIronHackDiver = {
 
         this.reset()
         setInterval(() => {
-            //this.framesCounter > 5000 ? this.framesCounter = 0 : this.framesCounter++
+            this.framesCounter > 5000 ? this.framesCounter = 0 : this.framesCounter++
+            
             this.clearAll()
             this.drawAll()
-           
+
+            this.createEnemy()
+            this.clearEnemy()
             // this.clearBackGround()
 
 
-        }, 20)
+        }, 1000 / this.FPS)
 
     },
     reset() {
         this.backGround = new Background(this.ctx, 0, 20, this.canvasSize.w, this.canvasSize.h, this.canvasSize)
         this.createPlayer()
-        this.createEnemy()
-        console.log(this.backGround)
+        //console.log(this.backGround)
     },//
 
     //CREAR//
 
     drawAll() {
-
-
 
         //this.token.draw()
         //this.createBackGround()
@@ -94,24 +90,36 @@ const gameIronHackDiver = {
         this.player = new Player(this.ctx, 20, 600, 100, 150, this.canvasSize)
         console.log(`buzo`)
     },
+
     createEnemy(){
-        const x = this.canvasSize.w - 130;
-        const level1y = 600;
-        const level2y = 300;
+        
         const imgUrlA = `../img/enemy_level_1_A.png`
-        const imgUrlB= `../img/enemy_level_1_A.png`
-        this.enemyLevel1.push(new Enemy(this.ctx, x, level1y, 80, 130, imgUrlA, this.canvasSize))
-        this.enemyLevel2.push(new Enemy(this.ctx, x, level2y, 80, 130, imgUrlB, this.canvasSize))
+        const imgUrlB = `../img/bg.png`
 
-        // for(let i=0; i<2;i++){
+        const x = this.canvasSize.w - 130;
+        const framesLimitLevel1 = (Math.floor(Math.random() * 10))*25;  
+        const framesLimitLevel2 = (Math.floor(Math.random() * 10))*30;  
+        
+        if (this.framesCounter % framesLimitLevel1 === 0) {
+            this.enemyLevel1.push(new Enemy(this.ctx, x, 600, 80, 130, imgUrlA, this.canvasSize,null,50))
+        }
 
-        //     this.enemyLevel1.push(new Enemy(this.ctx, x, level1y, 80, 130, imgUrlA, this.canvasSize))
-        //     this.enemyLevel2.push(new Enemy(this.ctx, x, level2y, 80, 130, imgUrlB, this.canvasSize))
-        // }
-    
-        console.log(this.enemy)
+        if (this.framesCounter % framesLimitLevel2 === 0) {
+            this.enemyLevel2.push(new Enemy(this.ctx, x, 300, 80, 130, imgUrlB, this.canvasSize,null,10))
+        }
+
+        // const level1y = 600;
+        // const level2y = 300;
+        // const imgUrlA = `../img/enemy_level_1_A.png`
+        // const imgUrlB= `../img/enemy_level_1_A.png`
+        // this.enemyLevel1.push(new Enemy(this.ctx, x, level1y, 80, 130, imgUrlA, this.canvasSize))
+        // this.enemyLevel2.push(new Enemy(this.ctx, x, level2y, 80, 130, imgUrlB, this.canvasSize))
     },
 
+    clearEnemy() {
+        this.enemyLevel1 = this.enemyLevel1.filter(elm => elm.enemyPos.x >= 0)                // ?? no entiendo el posX
+        this.enemyLevel2 = this.enemyLevel2.filter(elm => elm.enemyPos.x >= 0)
+    },
 
     ////LIMPIAR//
     clearAll() {

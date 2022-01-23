@@ -1,5 +1,5 @@
 class Enemy {
-    constructor(ctx, enemyPosX, enemyPosY, enemyWidth, enemyHeight, imgUrl, gameSize, keys) {
+    constructor(ctx, enemyPosX, enemyPosY, enemyWidth, enemyHeight, imgUrl, gameSize, keys, enemyVelX) {
         this.ctx = ctx
         this.enemyPos = { x: enemyPosX, y: enemyPosY }
         this.enemySize = { w: enemyWidth, h: enemyHeight }
@@ -11,7 +11,7 @@ class Enemy {
         this.keys = keys
         this.attackOne = 0
         this.attackTwo = []
-        this.enemyVelX = 10 
+        this.enemyVelX = enemyVelX 
         //  this.imageInstance.frames=3
         //this.Image.frameIndex = 0
         this.init()
