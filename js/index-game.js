@@ -54,6 +54,7 @@ const gameIronHackDiver = {
             this.player.clearAttackOne()
             //this.setEventListeners()
             // this.clearBackGround()
+            this.bulletCollision()
             this.isCollision() ? this.gameOver() : null
 
         }, 1000 / this.FPS)
@@ -71,6 +72,7 @@ const gameIronHackDiver = {
         //this.token.draw()
         //this.createBackGround()
         this.backGround.draw()
+        this.player.moveUp()
         this.player.draw()
         this.enemyLevel1.forEach(elm => elm.draw())
         this.enemyLevel2.forEach(elm => elm.draw())
@@ -118,10 +120,26 @@ const gameIronHackDiver = {
     clearBackGround() {
         this.ctx.clearRect(0, 0, this.canvasSize.w, this.canvasSize.h)
     },
+    bulletCollision() {
+        this.enemyLevel1.forEach((enemy, i) => {
+            this.player.attackOne.forEach(bullet => {
+                if (
+                    bullet.attackOnePos.x + bullet.attackOneSize.w >= enemy.enemyPos.x &&
+                    bullet.attackOnePos.y + bullet.attackOneSize.h >= enemy.enemyPos.y &&
+                    bullet.attackOnePos.x <= enemy.enemyPos.x + enemy.enemySize.w &&
+                    bullet.attackOnePos.y <= enemy.enemyPos.y + enemy.enemySize.h
+                ) {
+                    console.log('COLISION')
+                    this.enemyLevel1.splice(i, 1)
+                    
+                    
+                }
+            })
+        })
 
-    isCollision(elem1, elem2) {
+    },
 
-        
+    isCollision(elem1, elem2) { // revisar ver que pueda colisionar. 1. Quién ha colisionado | 2. Con qué | 3. Qué hace cuando colisiona
 
         // const allEnemies = [...this.enemyLevel1, ...this.enemyLevel2];
         // return allEnemies.some(elm => {
@@ -150,7 +168,9 @@ const gameIronHackDiver = {
             const { key } = event
             key === `ArrowRight` ? this.player.moveRight() : null
             key === `ArrowLeft` ? this.player.moveLeft() : null
-            key === `ArrowUp` && (this.player.playerPos.y + this.player.playerSize.h === this.player.playerInitialPos.y + this.player.playerSize.h) ? this.player.jump() : null
+            key === `ArrowUp` ?//&& (this.player.playerPos.y + this.player.playerSize.h === 
+                //this.player.playerInitialPos.y + this.player.playerSize.h) ? 
+                this.player.jump() : null
             key === ` ` ? this.player.shoot() : null
         })
 
