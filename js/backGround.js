@@ -9,19 +9,18 @@ class Background {
         this.backGroundVelX = 5;
         this.backGroundSize = { w: backGroundWidth, h: backGroundHeight }
         this.imageInstance = undefined,
-        
-        this.init()
+
+            this.init()
     }
     init() {
         this.imageInstance = new Image();
-        this.imageInstance.src = `../img/fondov1.png`;
-    
+        this.imageInstance.src = `../img/fondov2.png`;
+
     }
     draw() {
         this.ctx.drawImage(this.imageInstance, this.backGroundPos.x, this.backGroundPos.y, this.backGroundSize.w, this.backGroundSize.h);
         this.ctx.drawImage(this.imageInstance, this.backGroundPos.x + this.backGroundSize.w, this.backGroundPos.y, this.backGroundSize.w, this.backGroundSize.h);
         this.move()
-        console.log(`funciono`)
     }
 
     move() {
