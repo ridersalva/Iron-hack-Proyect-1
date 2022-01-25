@@ -52,7 +52,7 @@ const gameIronHackDiver = {
             this.createEnemy()
             this.clearEnemy()
             this.player.clearAttackOne()
-            this.player.clearPunch()
+           // this.player.clearPunch()
             this.ancherCollision()
             this.checkPlayerKilled() ? this.gameOver() : null
 
