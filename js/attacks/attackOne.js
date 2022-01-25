@@ -13,18 +13,21 @@ class AttackOne {   // larga distancia
         this.init()
     }
     init() {
+        
+        this.imageInstance = new Image()
+        this.imageInstance.src = `../img/ancher.png`
         this.draw()
-        //this.imageInstance = new Image()
-        //this.imageInstance.src = `img/fondo.png`
     }
     draw() { 
-        //this.ctx.drawImage(this.imageInstance, this.attackOnePos.x, this.attackOnePos.y, this.attackOneSize.w, this.attackOneSize.h)
         
-        this.ctx.beginPath();
-        this.ctx.fillStyle = "yellow";
-        this.ctx.arc(this.attackOnePos.x,this.attackOnePos.y, this.radius,0, Math.PI*2)
-        this.ctx.fill();
-        this.ctx.closePath();
+        this.ctx.drawImage(this.imageInstance, this.attackOnePos.x, this.attackOnePos.y, this.attackOneSize.w, this.attackOneSize.h)
+    
+        // Pelotita amarilla
+        // this.ctx.beginPath();
+        // this.ctx.fillStyle = "yellow";
+        // this.ctx.arc(this.attackOnePos.x,this.attackOnePos.y, this.radius,0, Math.PI*2)
+        // this.ctx.fill();
+        // this.ctx.closePath();
         
         this.move()
     }
