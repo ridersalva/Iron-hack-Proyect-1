@@ -1,5 +1,5 @@
 class Player {
-    constructor(ctx, playerPosX, playerPosY, playerWidth, playerHeight, gameSize) {
+    constructor(ctx, playerPosX, playerPosY, playerWidth, playerHeight, gameSize, lifes) {
         this.ctx = ctx
         this.playerPos = { x: playerPosX, y: playerPosY }
         this.playerInitialPos = { x: playerPosX, y: 520 }
@@ -13,6 +13,7 @@ class Player {
         this.attackImageInstance = undefined
         this.attackOne = []             // ataque larga distancia
         this.attackTwo = false          // ataque a corta distancia
+        this.lifes = lifes;
 
         //  this.imageInstance.frames=3
         //this.Image.frameIndex = 0
@@ -87,6 +88,11 @@ class Player {
     shoot() {
         this.attackOne.push(new AttackOne(this.ctx, this.playerPos.x + this.playerSize.w, this.playerPos.y + this.playerSize.h / 2, this.playerSize.w * .75, this.playerSize.h / 4, this.gameSize))
     }
+
+    loseLife(){
+        this.lifes--;
+        //return this.lifes;
+    }    
 
     // punch() {
     //     this.attackTwo = new AttackTwo(this.ctx, this.playerPos.x, this.playerPos.y, this.playerSize.w, this.playerSize.h, this.gameSize)

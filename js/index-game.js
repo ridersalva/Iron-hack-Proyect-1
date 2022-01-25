@@ -15,15 +15,12 @@ const gameIronHackDiver = {
     enemyLevel2: [],
     plant: [],
     plant2: [],
-    life: 3,
     canvasSize: {
         w: undefined,
         h: undefined
     },
-    keys: {
-        SPACE: ` `,
-        TOP: 'ArrowUp'
-    },
+    playerLifes: 3,
+    score: 0,
 
 
     //INICIALIZACION
@@ -62,15 +59,26 @@ const gameIronHackDiver = {
             this.createPlant2()
             this.ancherCollision()
             this.punchCollision()
-            this.checkPlayerDamaged() ? this.gameOver() : null
+            if(this.checkPlayerDamaged()){
+                // this.playerLifes = this.player.loseLife();
+                this.player.loseLife();
+                this.playerLifes = this.player.lifes
+                this.gameOver();
+            }
             this.clearPlant()
             this.clearPlant2()
         }, 1000 / this.FPS)
 
     },
+    
     reset() {
+
         this.backGround = new Background(this.ctx, 0, 20, this.canvasSize.w, this.canvasSize.h, this.canvasSize)
         this.createPlayer()
+        setTimeout(()=>{
+            clearInterval(this.interval)
+            alert('GAME OVER')
+        },60000)
     },
 
     //CREAR//
@@ -85,13 +93,14 @@ const gameIronHackDiver = {
             elm.draw()
         })
         this.plant2.forEach(elm => elm.draw())
-        this.drawText("Vidas")
-        this.createLifeBar()
+        //this.drawText("Vidas")
+        this.drawScore()
+        this.drawLifeBar()
 
     },
 
     createPlayer() {
-        this.player = new Player(this.ctx, 20, 520, 260, 420, this.canvasSize)
+        this.player = new Player(this.ctx, 20, 520, 260, 420, this.canvasSize, this.playerLifes)
     },
 
     createEnemy() {
@@ -183,6 +192,7 @@ const gameIronHackDiver = {
                 ) {
                     enemies.splice(i, 1)
                     this.player.attackOne.splice(j, 1)
+                    this.score += 10
                 }
             })
         })
@@ -205,6 +215,7 @@ const gameIronHackDiver = {
                     this.player.playerPos.y <= enemy.enemyPos.y + enemy.enemySize.h
                 ) {
                     enemies.splice(i, 1)
+                    this.score+=30
                     console.log('COLISION')
                 }
             });
@@ -214,24 +225,30 @@ const gameIronHackDiver = {
     //COLISIONES PARA GAME OVER
     checkPlayerDamaged() { //  Falta definir qué hace cuando colisiona ???
         const allEnemies = [...this.enemyLevel1, ...this.enemyLevel2];
-
+        let hitPlayer = false;
 
         return allEnemies.some(elm => {
-            return (
+            if(
                 this.player.playerPos.x + this.player.playerSize.w >= elm.enemyPos.x &&
                 this.player.playerPos.y + this.player.playerSize.h >= elm.enemyPos.y &&
                 this.player.playerPos.x <= elm.enemyPos.x + elm.enemySize.w &&
-                this.player.playerPos.y <= elm.enemyPos.y + elm.enemySize.h
-            )
+                this.player.playerPos.y <= elm.enemyPos.y + elm.enemySize.h &&
+                elm.hitPlayer !== true 
+            ){
+                hitPlayer = true;
+                elm.hitPlayer = true;
+            }
+
+            return hitPlayer
 
         })
     },
 
     gameOver() {
-        //if(this.life===0){
-        clearInterval(this.interval)
-        //}
-
+        if (this.playerLifes === 0) {
+            this.drawLifeBar()
+            clearInterval(this.interval)
+        }
     },
 
     ////MOVER
@@ -256,9 +273,18 @@ const gameIronHackDiver = {
         })
 
     },
-    createLifeBar() {
+    drawLifeBar() {
+        const lifeWidth = 100;
+        this.ctx.fillStyle = 'white'
+        this.ctx.fillRect(this.canvasSize.w - 400, this.canvasSize.h - 950, lifeWidth*3, 80)
         this.ctx.fillStyle = 'green'
-        this.ctx.fillRect(this.canvasSize.w - 400, this.canvasSize.h - 950, 300, 80)
+        this.ctx.fillRect(this.canvasSize.w - 400, this.canvasSize.h - 950, lifeWidth*this.playerLifes, 80)
+    },
+    drawScore() {
+        const scoreText = `Score : ${this.score}`
+        this.ctx.fillStyle = 'black'
+        this.ctx.font = '50px arial'
+        this.ctx.fillText(scoreText, 100, 70)
     },
     drawText(text) {
         this.ctx.font = '50px arial'

@@ -12,6 +12,7 @@ class Enemy {
         this.attackOne = 0
         this.attackTwo = []
         this.enemyVelX = enemyVelX 
+        this.hitPlayer = false // No he golpeado al jugador
         //  this.imageInstance.frames=3
         //this.Image.frameIndex = 0
         this.init()
