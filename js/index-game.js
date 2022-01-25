@@ -8,9 +8,13 @@ const gameIronHackDiver = {
     FPS: 60,
     framesCounter: 0,
     backGround: undefined,
+    decoration: undefined,
+    decoration2: undefined,
     player: undefined,
     enemyLevel1: [],
     enemyLevel2: [],
+    plant: [],
+    plant2: [],
     life: 3,
     canvasSize: {
         w: undefined,
@@ -41,9 +45,9 @@ const gameIronHackDiver = {
     //START////
 
     start() {
-        
+
         this.reset()
-       
+
         this.setEventHandlers()
         this.interval = setInterval(() => {
             this.framesCounter > 5000 ? this.framesCounter = 0 : this.framesCounter++
@@ -52,13 +56,15 @@ const gameIronHackDiver = {
 
             this.drawAll()
             this.createEnemy()
+            this.createPlant()
             this.clearEnemy()
             this.player.clearAttackOne()
-            
+            this.createPlant2()
             this.ancherCollision()
             this.punchCollision()
             this.checkPlayerDamaged() ? this.gameOver() : null
-
+            this.clearPlant()
+            this.clearPlant2()
         }, 1000 / this.FPS)
 
     },
@@ -71,12 +77,14 @@ const gameIronHackDiver = {
     drawAll() {
 
         this.backGround.draw()
+        this.plant.forEach(elm => elm.draw())
         this.player.draw()
         this.enemyLevel1.forEach(elm => elm.draw())
         this.enemyLevel2.forEach(elm => elm.draw())
         this.player.attackOne.forEach((elm) => {
             elm.draw()
         })
+        this.plant2.forEach(elm => elm.draw())
         this.drawText("Vidas")
         this.createLifeBar()
 
@@ -96,12 +104,51 @@ const gameIronHackDiver = {
         const framesLimitLevel2 = (Math.floor(Math.random() * 10)) * 50;
 
         if (this.framesCounter % framesLimitLevel1A === 0) {
-            this.enemyLevel1.push(new Enemy(this.ctx, x, 600, 260 * .80, 420 * .8, imgUrlA, this.canvasSize, null, 5))
+            this.enemyLevel1.push(new Enemy(this.ctx, x, 600, 260 * .80, 420 * .8, imgUrlA, this.canvasSize, null, 3))
+        }
+        if (this.framesCounter % framesLimitLevel1A === 0) {
+            this.enemyLevel1.push(new Enemy(this.ctx, x, 520, 260 * .80, 420 * .8, imgUrlA, this.canvasSize, null, 5))
         }
 
         if (this.framesCounter % framesLimitLevel2 === 0) {
             this.enemyLevel2.push(new Enemy(this.ctx, x, 200, 284, 189, imgUrlB, this.canvasSize, null, 7))
         }
+
+    },
+    createPlant() {
+
+        const x = this.canvasSize.w;
+        const framesplantA = (Math.floor(Math.random() * 10)) * 30;
+
+
+      
+        if (this.framesCounter % framesplantA === 0) {
+            this.plant2.push(new Decoration(this.ctx, x, 550, 50, 70, this.canvasSize, 4))
+        }
+
+    },
+    createPlant2() {
+
+        const x = this.canvasSize.w;
+        const framesplantA = (Math.floor(Math.random() * 10)) * 30;
+
+        if (this.framesCounter % framesplantA === 0) {
+            this.plant2.push(new Decoration(this.ctx, x, 565, 80, 100, this.canvasSize, 6))
+        }
+
+        if (this.framesCounter % framesplantA === 0) {
+            this.plant.push(new Decoration(this.ctx, x, 500, 170, 270, this.canvasSize, 8))
+        }
+
+      
+
+    },
+    clearPlant() {
+        this.plant = this.plant.filter(elm => elm.plant.x + elm.plantSize.w >= 0)
+
+    },
+    clearPlant2() {
+        this.plant2 = this.plant2.filter(elm => elm.plant2.x + elm.plant2Size.w >= 0)
 
     },
 
@@ -150,7 +197,7 @@ const gameIronHackDiver = {
     //COLISIONES CON GOLPE DE CERCA
     checkPunchCollision(enemies) {
         if (this.player.attackTwo === true) {
-            enemies.forEach((enemy,i) => {
+            enemies.forEach((enemy, i) => {
                 if (
                     this.player.playerPos.x + this.player.playerSize.w >= enemy.enemyPos.x &&
                     this.player.playerPos.y + this.player.playerSize.h >= enemy.enemyPos.y &&
@@ -167,8 +214,8 @@ const gameIronHackDiver = {
     //COLISIONES PARA GAME OVER
     checkPlayerDamaged() { //  Falta definir qué hace cuando colisiona ???
         const allEnemies = [...this.enemyLevel1, ...this.enemyLevel2];
-        
-        
+
+
         return allEnemies.some(elm => {
             return (
                 this.player.playerPos.x + this.player.playerSize.w >= elm.enemyPos.x &&
@@ -182,7 +229,7 @@ const gameIronHackDiver = {
 
     gameOver() {
         //if(this.life===0){
-            clearInterval(this.interval)
+        clearInterval(this.interval)
         //}
 
     },
@@ -209,7 +256,7 @@ const gameIronHackDiver = {
         })
 
     },
-    createLifeBar(){
+    createLifeBar() {
         this.ctx.fillStyle = 'green'
         this.ctx.fillRect(this.canvasSize.w - 400, this.canvasSize.h - 950, 300, 80)
     },
@@ -217,5 +264,5 @@ const gameIronHackDiver = {
         this.ctx.font = '50px arial'
         this.ctx.fillText(text, 100, 100)
     }
-   
+
 }
