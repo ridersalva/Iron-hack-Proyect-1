@@ -1,23 +1,38 @@
-class AttackTwo {
-    constructor(ctx, attackTwoPosX, attackTwoPosY, attackTwoWidth, attackTwoHeight, gameSize) {
+class attackTwo {   // corta distancia
+    constructor(ctx, playerPosX, playerPosY, playerWidth, playerHeight, gameSize) {
         this.ctx = ctx
-        this.attackTwoPos = { x: attackTwoPosX, y: attackTwoPosY }
-        this.attackTwoSize = { w: attackTwoWidth, h: attackTwoHeight }
-        this.attackTwoVel = undefined
-        this.attackTwoPhysics = { gravity: .4 }
+        this.attackTwoPos = { x: playerPosX, y: playerPosY }
+        this.attackTwoSize = { w: playerWidth, h: playerHeight }
+
+        //this.attackOnePhysics = { gravity: .4 }
         this.gameSize = gameSize
         this.imageInstance = undefined
+    
         this.init()
     }
     init() {
+
         this.imageInstance = new Image()
-        //cambiar a la imagen   this.imageInstance.src = `img/principal1.png`
+        this.imageInstance.src = `../img/punch.png`
+        this.draw()
     }
     draw() {
-        this.move()
-        this.ctx.drawImage(this.imageInstance, this.attackTwoPos.x, this.attackTwoPos.y, this.attackTwoSize.w, this.attackTwoSize.h)
-    }
-    move() { }
-    checkCollision() { }
-}
 
+        this.ctx.drawImage(this.imageInstance, this.attackTwoPos.x, this.attackTwoPos.y, this.attackTwoSize.w, this.attackTwoSize.h)
+
+        // Pelotita amarilla
+        // this.ctx.beginPath();
+        // this.ctx.fillStyle = "yellow";
+        // this.ctx.arc(this.attackOnePos.x,this.attackOnePos.y, this.radius,0, Math.PI*2)
+        // this.ctx.fill();
+        // this.ctx.closePath();
+
+        this.move()
+    }
+
+    move() {
+        this.attackTwoPos.x += this.attackTwoVelX
+
+    }
+    checkCollision() {}
+}

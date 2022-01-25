@@ -52,6 +52,7 @@ const gameIronHackDiver = {
             this.createEnemy()
             this.clearEnemy()
             this.player.clearAttackOne()
+            this.player.clearPunch()
             this.ancherCollision()
             this.checkPlayerKilled() ? this.gameOver() : null
 
@@ -145,10 +146,7 @@ const gameIronHackDiver = {
     //     })
     // },
 
-    ancherCollision() {
-        this.checkAncherCollision(this.enemyLevel1)
-        this.checkAncherCollision(this.enemyLevel2)
-    },
+  
 
     checkAncherCollision(enemies) {
         enemies.forEach((enemy, i) => {
@@ -166,6 +164,10 @@ const gameIronHackDiver = {
             })
         })
     },
+    ancherCollision() {
+        this.checkAncherCollision(this.enemyLevel1)
+        this.checkAncherCollision(this.enemyLevel2)
+    },
 
     checkPlayerKilled() { // revisar ver que pueda colisionar. 1. Quién ha colisionado | 2. Con qué | 3. Qué hace cuando colisiona
 
@@ -179,6 +181,8 @@ const gameIronHackDiver = {
             )
         })
     },
+
+    
 
     gameOver() {
         clearInterval(this.interval)
@@ -195,6 +199,7 @@ const gameIronHackDiver = {
                 this.player.moveUp() : null
             key === `ArrowDown` ? this.player.moveDown() : null
             key === ` ` ? this.player.shoot() : null
+           // key===`w`?this.player.punch():null
         })
 
     },

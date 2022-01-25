@@ -11,7 +11,7 @@ class Player {
         this.gameSize = gameSize
         this.imageInstance = undefined
         this.attackOne = []   // ataque larga distancia
-        this.attackTwo = []
+        this.attackTwo = undefined
 
         //  this.imageInstance.frames=3
         //this.Image.frameIndex = 0
@@ -87,9 +87,15 @@ class Player {
     // }
 
     shoot() {
-        this.attackOne.push(new AttackOne(this.ctx, this.playerPos.x + this.playerSize.w, this.playerPos.y + this.playerSize.h / 2, this.playerSize.w / 8, this.playerSize.h / 8, this.gameSize))
+        this.attackOne.push(new AttackOne(this.ctx, this.playerPos.x + this.playerSize.w, this.playerPos.y + this.playerSize.h / 2, this.playerSize.w , this.playerSize.h / 3, this.gameSize))
     }
 
+    // punch() {
+    //     this.attackTwo=new AttackTwo(this.ctx, this.playerPos.x , this.playerPos.y , this.playerSize.w, this.playerSize.h, this.gameSize)
+    // }
+    // clearPunch() {
+    //     this.ctx.clearRect(0, 0, this.playerSize.w, this.playerSize.h)
+    // }
     clearAttackOne() {
         this.attackOne = this.attackOne.filter(elm => elm.attackOnePos.x <= this.gameSize.w)
     }
