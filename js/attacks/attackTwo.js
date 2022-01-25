@@ -1,10 +1,8 @@
-class attackTwo {   // corta distancia
+class attackTwo {   // ataque de corta distancia
     constructor(ctx, playerPosX, playerPosY, playerWidth, playerHeight, gameSize) {
         this.ctx = ctx
         this.attackTwoPos = { x: playerPosX, y: playerPosY }
         this.attackTwoSize = { w: playerWidth, h: playerHeight }
-
-        //this.attackOnePhysics = { gravity: .4 }
         this.gameSize = gameSize
         this.imageInstance = undefined
     
@@ -27,12 +25,10 @@ class attackTwo {   // corta distancia
         // this.ctx.fill();
         // this.ctx.closePath();
 
-        this.move()
+        //this.move()
     }
 
-    move() {
-        this.attackTwoPos.x += this.attackTwoVelX
-
-    }
-    checkCollision() {}
+    // move() {
+    //     this.attackTwoPos.x += this.attackTwoVelX
+    // }
 }

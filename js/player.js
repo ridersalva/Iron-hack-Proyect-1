@@ -10,8 +10,9 @@ class Player {
 
         this.gameSize = gameSize
         this.imageInstance = undefined
-        this.attackOne = []   // ataque larga distancia
-        this.attackTwo = undefined
+        this.attackImageInstance = undefined
+        this.attackOne = []             // ataque larga distancia
+        this.attackTwo = false          // ataque a corta distancia
 
         //  this.imageInstance.frames=3
         //this.Image.frameIndex = 0
@@ -22,18 +23,21 @@ class Player {
     init() {
         this.imageInstance = new Image()
         this.imageInstance.src = `../img/player1.png`
+        this.attackImageInstance = new Image()
+        this.attackImageInstance.src = '../img/punch.png'
 
     }
-
     ///CREAR///
     draw() {
+        !this.attackTwo ?
+            this.ctx.drawImage(this.imageInstance, this.playerPos.x, this.playerPos.y, this.playerSize.w, this.playerSize.h)
+            :
+            this.ctx.drawImage(this.attackImageInstance, this.playerPos.x, this.playerPos.y, this.playerSize.w, this.playerSize.h)
 
-        this.ctx.drawImage(this.imageInstance, this.playerPos.x, this.playerPos.y, this.playerSize.w, this.playerSize.h)
         this.dropDiver()
 
     }
-
-
+    //DROP FOR DEFAULT
     dropDiver() {
         if (this.playerPos.y < this.playerInitialPos.y) {   // jugador encima de su posicion de inicio
             this.playerPos.y += this.playerVel.y;           // sumo velocidad constante para simular caida
@@ -43,21 +47,19 @@ class Player {
             this.playerVel.y = 1;
         }
     }
-
+    //MOVES inside the SCREEN
     moveRight() {
         if (this.playerPos.x + this.playerSize.w < this.gameSize.w) {
             this.playerPos.x += 50
         }
-
     }
     moveLeft() {
         if (this.playerPos.x >= 0) {
             this.playerPos.x -= 50
         }
-
     }
     moveUp() {
-        // Antes : Codigo de move() de Mario
+        // Antes : Codigo move() Mario
         // if(this.playerPos.y<this.playerInitialPos.y){
         //     this.playerPos.y-=this.playerVel.y
         //     this.playerVel.y+=this.gravity
@@ -68,16 +70,12 @@ class Player {
         if (this.playerPos.y >= 0) {
             this.playerPos.y -= 50
         }
-
-
-
     }
-
     moveDown() {
         this.playerPos.y += 50
     }
 
-    // Funcion jump si nos sobra tiempo
+    // Funcion jump: no es prioridad en el MVP
     // jump() {
     //     console.log("salto")
     //     if(this.playerPos.y===this.playerInitialPos.y){
@@ -87,15 +85,17 @@ class Player {
     // }
 
     shoot() {
-        this.attackOne.push(new AttackOne(this.ctx, this.playerPos.x + this.playerSize.w, this.playerPos.y + this.playerSize.h / 2, this.playerSize.w , this.playerSize.h / 3, this.gameSize))
+        this.attackOne.push(new AttackOne(this.ctx, this.playerPos.x + this.playerSize.w, this.playerPos.y + this.playerSize.h / 2, this.playerSize.w, this.playerSize.h / 3, this.gameSize))
     }
 
     // punch() {
-    //     this.attackTwo=new AttackTwo(this.ctx, this.playerPos.x , this.playerPos.y , this.playerSize.w, this.playerSize.h, this.gameSize)
+    //     this.attackTwo = new AttackTwo(this.ctx, this.playerPos.x, this.playerPos.y, this.playerSize.w, this.playerSize.h, this.gameSize)
     // }
+
     // clearPunch() {
-    //     this.ctx.clearRect(0, 0, this.playerSize.w, this.playerSize.h)
+    //     this.ctx.clearRect(0, 0, this.playerSize.w, this.playerSize.h)         // borra al jugador golpeando?
     // }
+
     clearAttackOne() {
         this.attackOne = this.attackOne.filter(elm => elm.attackOnePos.x <= this.gameSize.w)
     }

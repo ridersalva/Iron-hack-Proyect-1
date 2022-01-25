@@ -11,6 +11,7 @@ const gameIronHackDiver = {
     player: undefined,
     enemyLevel1: [],
     enemyLevel2: [],
+    life: 3,
     canvasSize: {
         w: undefined,
         h: undefined
@@ -40,8 +41,9 @@ const gameIronHackDiver = {
     //START////
 
     start() {
-
+        
         this.reset()
+       
         this.setEventHandlers()
         this.interval = setInterval(() => {
             this.framesCounter > 5000 ? this.framesCounter = 0 : this.framesCounter++
@@ -52,9 +54,10 @@ const gameIronHackDiver = {
             this.createEnemy()
             this.clearEnemy()
             this.player.clearAttackOne()
-           // this.player.clearPunch()
+            
             this.ancherCollision()
-            this.checkPlayerKilled() ? this.gameOver() : null
+            this.punchCollision()
+            this.checkPlayerDamaged() ? this.gameOver() : null
 
         }, 1000 / this.FPS)
 
@@ -67,15 +70,15 @@ const gameIronHackDiver = {
     //CREAR//
     drawAll() {
 
-        //this.token.draw()
         this.backGround.draw()
-        //this.player.moveUp()
         this.player.draw()
         this.enemyLevel1.forEach(elm => elm.draw())
         this.enemyLevel2.forEach(elm => elm.draw())
         this.player.attackOne.forEach((elm) => {
             elm.draw()
         })
+        this.drawText("Vidas")
+        this.createLifeBar()
 
     },
 
@@ -114,40 +117,14 @@ const gameIronHackDiver = {
     clearBackGround() {
         this.ctx.clearRect(0, 0, this.canvasSize.w, this.canvasSize.h)
     },
-    // ancherCollision() {
-    //     this.enemyLevel1.forEach((enemy, i) => {
-    //         this.player.attackOne.forEach((ancher, j) => {
-    //             if (
-    //                 ancher.attackOnePos.x + ancher.attackOneSize.w >= enemy.enemyPos.x &&
-    //                 ancher.attackOnePos.y + ancher.attackOneSize.h >= enemy.enemyPos.y &&
-    //                 ancher.attackOnePos.x <= enemy.enemyPos.x + enemy.enemySize.w &&
-    //                 ancher.attackOnePos.y <= enemy.enemyPos.y + enemy.enemySize.h
-    //             ) {
-    //                 console.log('COLISION')
-    //                 this.enemyLevel1.splice(i, 1)
-    //                 this.player.attackOne.splice(j, 1)
-    //             }
-    //         })
-    //     })
 
-    //     this.enemyLevel2.forEach((enemy, i) => {
-    //         this.player.attackOne.forEach((ancher, j) => {
-    //             if (
-    //                 ancher.attackOnePos.x + ancher.attackOneSize.w >= enemy.enemyPos.x &&
-    //                 ancher.attackOnePos.y + ancher.attackOneSize.h >= enemy.enemyPos.y &&
-    //                 ancher.attackOnePos.x <= enemy.enemyPos.x + enemy.enemySize.w &&
-    //                 ancher.attackOnePos.y <= enemy.enemyPos.y + enemy.enemySize.h
-    //             ) {
-    //                 console.log('COLISION')
-    //                 this.enemyLevel2.splice(i, 1)
-    //                 this.player.attackOne.splice(j, 1)
-    //             }
-    //         })
-    //     })
-    // },
 
-  
-
+    //COLISIONES
+    ancherCollision() {
+        this.checkAncherCollision(this.enemyLevel1)
+        this.checkAncherCollision(this.enemyLevel2)
+    },
+    //COLISIONES CON ANCLA
     checkAncherCollision(enemies) {
         enemies.forEach((enemy, i) => {
             this.player.attackOne.forEach((ancher, j) => {
@@ -157,21 +134,41 @@ const gameIronHackDiver = {
                     ancher.attackOnePos.x <= enemy.enemyPos.x + enemy.enemySize.w &&
                     ancher.attackOnePos.y <= enemy.enemyPos.y + enemy.enemySize.h
                 ) {
-                    console.log('COLISION')
                     enemies.splice(i, 1)
                     this.player.attackOne.splice(j, 1)
                 }
             })
         })
     },
-    ancherCollision() {
-        this.checkAncherCollision(this.enemyLevel1)
-        this.checkAncherCollision(this.enemyLevel2)
+
+    punchCollision() {
+        this.checkPunchCollision(this.enemyLevel1)
+        this.checkPunchCollision(this.enemyLevel2)
+
     },
 
-    checkPlayerKilled() { // revisar ver que pueda colisionar. 1. Quién ha colisionado | 2. Con qué | 3. Qué hace cuando colisiona
+    //COLISIONES CON GOLPE DE CERCA
+    checkPunchCollision(enemies) {
+        if (this.player.attackTwo === true) {
+            enemies.forEach((enemy,i) => {
+                if (
+                    this.player.playerPos.x + this.player.playerSize.w >= enemy.enemyPos.x &&
+                    this.player.playerPos.y + this.player.playerSize.h >= enemy.enemyPos.y &&
+                    this.player.playerPos.x <= enemy.enemyPos.x + enemy.enemySize.w &&
+                    this.player.playerPos.y <= enemy.enemyPos.y + enemy.enemySize.h
+                ) {
+                    enemies.splice(i, 1)
+                    console.log('COLISION')
+                }
+            });
+        }
+    },
 
+    //COLISIONES PARA GAME OVER
+    checkPlayerDamaged() { //  Falta definir qué hace cuando colisiona ???
         const allEnemies = [...this.enemyLevel1, ...this.enemyLevel2];
+        
+        
         return allEnemies.some(elm => {
             return (
                 this.player.playerPos.x + this.player.playerSize.w >= elm.enemyPos.x &&
@@ -179,13 +176,15 @@ const gameIronHackDiver = {
                 this.player.playerPos.x <= elm.enemyPos.x + elm.enemySize.w &&
                 this.player.playerPos.y <= elm.enemyPos.y + elm.enemySize.h
             )
+
         })
     },
 
-    
-
     gameOver() {
-        clearInterval(this.interval)
+        //if(this.life===0){
+            clearInterval(this.interval)
+        //}
+
     },
 
     ////MOVER
@@ -199,8 +198,24 @@ const gameIronHackDiver = {
                 this.player.moveUp() : null
             key === `ArrowDown` ? this.player.moveDown() : null
             key === ` ` ? this.player.shoot() : null
-           // key===`w`?this.player.punch():null
+            if (key === `w`) { console.log(this.player.attackTwo) } // para comprobar ataque
+            if (key === `w` && this.player.attackTwo === false) {
+                this.player.attackTwo = true
+                setTimeout(() => {
+                    this.player.attackTwo = false
+                }, 200)
+            }
+
         })
 
     },
+    createLifeBar(){
+        this.ctx.fillStyle = 'green'
+        this.ctx.fillRect(this.canvasSize.w - 400, this.canvasSize.h - 950, 300, 80)
+    },
+    drawText(text) {
+        this.ctx.font = '50px arial'
+        this.ctx.fillText(text, 100, 100)
+    }
+   
 }
