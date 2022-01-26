@@ -15,6 +15,7 @@ const gameIronHackDiver = {
     enemyLevel2: [],
     plant: [],
     plant2: [],
+    images: [],
     canvasSize: {
         w: undefined,
         h: undefined
@@ -44,7 +45,7 @@ const gameIronHackDiver = {
     start() {
 
         this.reset()
-
+        this.initImages()
         this.setEventHandlers()
         this.interval = setInterval(() => {
             this.framesCounter > 5000 ? this.framesCounter = 0 : this.framesCounter++
@@ -77,7 +78,7 @@ const gameIronHackDiver = {
         setTimeout(() => {
             clearInterval(this.interval)
             alert('GAME OVER')
-        }, 10000)               // ver el tiempo de duración del juego
+        }, 60000)               // ver el tiempo de duración del juego
     },
 
     //CREAR//
@@ -95,7 +96,7 @@ const gameIronHackDiver = {
         //this.drawText("Vidas")
         this.drawScore()
         this.drawLifeBar()
-
+        this.drawRectangleWhite()
     },
 
     createPlayer() {
@@ -269,13 +270,21 @@ const gameIronHackDiver = {
         })
 
     },
-    drawLifeBar() {
-        const lifeWidth = 100;
-        this.ctx.fillStyle = 'white'
-        this.ctx.fillRect(this.canvasSize.w - 1800, this.canvasSize.h - 950, lifeWidth * 3, 80)
-        this.ctx.fillStyle = 'green'
-        this.ctx.fillRect(this.canvasSize.w - 1800, this.canvasSize.h - 950, lifeWidth * this.playerLifes, 80)
-    },
+    // drawLifeBar() {
+    //     const lifeWidth = 100;
+    //     this.ctx.fillStyle = 'white'
+    //     this.ctx.fillRect(this.canvasSize.w - 1800, this.canvasSize.h - 950, lifeWidth * 3, 80)
+    //     this.ctx.fillStyle = 'green'
+    //     this.ctx.fillRect(this.canvasSize.w - 1800, this.canvasSize.h - 950, lifeWidth * this.playerLifes, 80)
+    // },
+
+
+
+
+
+
+
+
     drawScore() {
         const scoreText = `Score : ${this.score}`
         this.ctx.fillStyle = 'black'
@@ -285,6 +294,25 @@ const gameIronHackDiver = {
     drawText(text) {
         this.ctx.font = '50px arial'
         this.ctx.fillText(text, 100, 100)
+    },
+
+    initImages() {  // antes del intervalo
+        const lifeBarImg = new Image()
+        lifeBarImg.src = '../img/life_Bar.png'
+        this.images.push(lifeBarImg)
+    },
+
+    drawLifeBar() { // va a drawAll
+        const lifeWidth = 100;
+        this.ctx.drawImage(this.images[0], this.canvasSize.w - 1800, this.canvasSize.h - 950, lifeWidth * 3, 80)   
+    },
+
+    drawRectangleWhite() { // va a drawAll
+        const lifeWidth = 100
+        this.ctx.fillStyle = 'white'
+        this.ctx.fillRect(this.canvasSize.w - 1800, this.canvasSize.h - 950, lifeWidth * this.playerLifes, 80)
     }
+
+
 
 }
