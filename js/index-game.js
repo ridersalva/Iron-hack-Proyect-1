@@ -93,10 +93,9 @@ const gameIronHackDiver = {
             elm.draw()
         })
         this.plant2.forEach(elm => elm.draw())
-        //this.drawText("Vidas")
         this.drawScore()
         this.drawLifeBar()
-        this.drawRectangleWhite()
+        this.drawLogoDiver()
     },
 
     createPlayer() {
@@ -148,8 +147,6 @@ const gameIronHackDiver = {
         if (this.framesCounter % framesplantA === 0) {
             this.plant.push(new Decoration(this.ctx, x, 500, 170, 270, this.canvasSize, 8))
         }
-
-
 
     },
     clearPlant() {
@@ -223,7 +220,7 @@ const gameIronHackDiver = {
     },
 
     //COLISIONES PARA GAME OVER
-    checkPlayerDamaged() { //  Falta definir qué hace cuando colisiona ???
+    checkPlayerDamaged() {
         const allEnemies = [...this.enemyLevel1, ...this.enemyLevel2];
         let hitPlayer = false;
 
@@ -268,23 +265,8 @@ const gameIronHackDiver = {
             }
 
         })
-
     },
-    // drawLifeBar() {
-    //     const lifeWidth = 100;
-    //     this.ctx.fillStyle = 'white'
-    //     this.ctx.fillRect(this.canvasSize.w - 1800, this.canvasSize.h - 950, lifeWidth * 3, 80)
-    //     this.ctx.fillStyle = 'green'
-    //     this.ctx.fillRect(this.canvasSize.w - 1800, this.canvasSize.h - 950, lifeWidth * this.playerLifes, 80)
-    // },
-
-
-
-
-
-
-
-
+    //DRAW SCORE
     drawScore() {
         const scoreText = `Score : ${this.score}`
         this.ctx.fillStyle = 'black'
@@ -296,23 +278,22 @@ const gameIronHackDiver = {
         this.ctx.fillText(text, 100, 100)
     },
 
-    initImages() {  // antes del intervalo
+    //LOGO DIVER
+    initImages() {
         const lifeBarImg = new Image()
-        lifeBarImg.src = '../img/life_Bar.png'
+        lifeBarImg.src = '../img/life_logo.png'
         this.images.push(lifeBarImg)
     },
-
-    drawLifeBar() { // va a drawAll
-        const lifeWidth = 100;
-        this.ctx.drawImage(this.images[0], this.canvasSize.w - 1800, this.canvasSize.h - 950, lifeWidth * 3, 80)   
+    drawLogoDiver() {
+        const lifeWidth = 30;
+        this.ctx.drawImage(this.images[0], 70, 10, lifeWidth * 3, 90)
     },
-
-    drawRectangleWhite() { // va a drawAll
-        const lifeWidth = 100
+    //DRAW LIFE BAR
+    drawLifeBar() {
+        const lifeWidth = 100;
         this.ctx.fillStyle = 'white'
-        this.ctx.fillRect(this.canvasSize.w - 1800, this.canvasSize.h - 950, lifeWidth * this.playerLifes, 80)
-    }
-
-
-
+        this.ctx.fillRect(160, 50, lifeWidth * 3, 40)
+        this.ctx.fillStyle = '#91AB91'
+        this.ctx.fillRect(160, 50, lifeWidth * this.playerLifes, 40)
+    },
 }
