@@ -256,13 +256,23 @@ const gameIronHackDiver = {
             key === `ArrowLeft` ? this.player.moveLeft() : null
             key === `ArrowUp` ? this.player.moveUp() : null
             key === `ArrowDown` ? this.player.moveDown() : null
-            key === ` ` ? this.player.shoot() : null
+            if(key === ` ` && this.player.canShoot === true) {
+                this.player.shoot()
+                this.player.canShoot = false;
+                setTimeout(() => {
+                    this.player.canShoot = true
+                }, 1000)
+            }
             if (key === `w` && this.player.attackTwo === false) {
                 this.player.attackTwo = true
                 setTimeout(() => {
                     this.player.attackTwo = false
                 }, 200)
             }
+
+
+
+
 
         })
     },

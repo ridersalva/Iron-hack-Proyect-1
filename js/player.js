@@ -11,7 +11,8 @@ class Player {
         this.gameSize = gameSize
         this.imageInstance = undefined
         this.attackImageInstance = undefined
-        this.attackOne = []             // ataque larga distancia
+        this.attackOne = [] 
+        this.canShoot = true;            // ataque larga distancia
         this.attackTwo = false          // ataque a corta distancia
         this.lifes = lifes;
 
@@ -26,7 +27,6 @@ class Player {
         this.imageInstance.src = `../img/player1.png`
         this.attackImageInstance = new Image()
         this.attackImageInstance.src = '../img/punch.png'
-
     }
     ///CREAR///
     draw() {
