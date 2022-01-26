@@ -40,9 +40,8 @@ class Player {
     }
     //DROP FOR DEFAULT
     dropDiver() {
-        if (this.playerPos.y < this.playerInitialPos.y) {   // jugador encima de su posicion de inicio
-            this.playerPos.y += this.playerVel.y;           // sumo velocidad constante para simular caida
-            //this.playerVel.y += this.playerPhysics.gravity;
+        if (this.playerPos.y < this.playerInitialPos.y) {   // player on top from its initial position
+            this.playerPos.y += this.playerVel.y;           // SUM velocity for a constant drop
         } else {
             this.playerPos.y = this.playerInitialPos.y;
             this.playerVel.y = 1;
@@ -60,14 +59,6 @@ class Player {
         }
     }
     moveUp() {
-        // Antes : Codigo move() Mario
-        // if(this.playerPos.y<this.playerInitialPos.y){
-        //     this.playerPos.y-=this.playerVel.y
-        //     this.playerVel.y+=this.gravity
-        // }else{
-        //     this.playerPos.y=this.playerInitialPos.y
-        //     this.playerVel.y=1
-        // }
         if (this.playerPos.y >= 0) {
             this.playerPos.y -= 50
         }
@@ -75,15 +66,6 @@ class Player {
     moveDown() {
         this.playerPos.y += 50
     }
-
-    // Funcion jump: no es prioridad en el MVP
-    // jump() {
-    //     console.log("salto")
-    //     if(this.playerPos.y===this.playerInitialPos.y){
-    //         this.playerVel.y-=10 // 
-    //         this.playerPos.y-=50
-    //     }
-    // }
 
     shoot() {
         this.attackOne.push(new AttackOne(this.ctx, this.playerPos.x + this.playerSize.w, this.playerPos.y + this.playerSize.h / 2, this.playerSize.w * .75, this.playerSize.h / 4, this.gameSize))
@@ -93,14 +75,6 @@ class Player {
         this.lifes--;
         //return this.lifes;
     }    
-
-    // punch() {
-    //     this.attackTwo = new AttackTwo(this.ctx, this.playerPos.x, this.playerPos.y, this.playerSize.w, this.playerSize.h, this.gameSize)
-    // }
-
-    // clearPunch() {
-    //     this.ctx.clearRect(0, 0, this.playerSize.w, this.playerSize.h)         // borra al jugador golpeando?
-    // }
 
     clearAttackOne() {
         this.attackOne = this.attackOne.filter(elm => elm.attackOnePos.x <= this.gameSize.w)
