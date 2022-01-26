@@ -1,13 +1,13 @@
-class Decoration {
+class Bubbles {
 
-    constructor(ctx, plantPosX, plantPosY, plantWidth, plantHeight, gameSize, plantVelX) {
+    constructor(ctx, bubblesPosX, bubblesPosY, bubblesWidth, bubblesHeight, gameSize, bubblesVelY) {
         this.ctx = ctx;
-        this.plantPos = { x: plantPosX, y: plantPosY };
-        this.plantVelX = plantVelX;
+        this.bubblesPos = { x: bubblesPosX, y: bubblesPosY };
+        this.bubblesVelY = bubblesVelY;
         this.gameSize = gameSize;
-        this.imgsArr = ['../img/plantas1.png', '../img/plantas2.png', `../img/stone.png`]
+        this.imgsArr = ['../img/burbuja.png', '../img/burbuja2.png']
         this.imgURl = this.getRandomImg();
-        this.plantSize = { w: plantWidth, h: plantHeight };
+        this.bubblesSize = { w: bubblesWidth, h: bubblesHeight };
         this.imageInstance = undefined,
 
             this.init()
@@ -18,14 +18,13 @@ class Decoration {
 
     }
     draw() {
-        this.ctx.drawImage(this.imageInstance, this.plantPos.x, this.plantPos.y, this.plantSize.w, this.plantSize.h);
+        this.ctx.drawImage(this.imageInstance, this.bubblesPos.x, this.bubblesPos.y, this.bubblesSize.w, this.bubblesSize.h);
         this.move()
 
     }
     move() {
-        this.plantPos.x -= this.plantVelX;
+        this.bubblesPos.y -= this.bubblesVelY;
     }
-
     getRandomImg() {
         //return Math.floor(Math.random() * (max - min + 1) + min)
         const imageindex = Math.floor(Math.random() * ((this.imgsArr.length + 1) - 1))
