@@ -50,7 +50,7 @@ const gameIronHackDiver = {
         this.canvasDom = document.getElementById(`canvasIronDiver`)
         this.canvasDom.addEventListener("click", () => {
             this.hasStarted = true
-            let gameSound = new Audio(`../sounds/gameSound.wav`)
+            let gameSound = new Audio(`../sounds/gameSoundgggg.mp3`)
             gameSound.play()
             gameSound.volume = 1
         })
