@@ -455,7 +455,7 @@ const gameIronHackDiver = {
                         this.remainAttacksOne = this.player.resetShoot()
                         this.player.canShoot = true
                       
-                    }, 1000)
+                    }, 10000)
                 }
             }
             if (key === `w` && this.player.attackTwo === false) {
@@ -465,7 +465,7 @@ const gameIronHackDiver = {
                 playerClose.volume = 1
                 setTimeout(() => {
                     this.player.attackTwo = false
-                }, 100)
+                }, 300)
             }
 
 
