@@ -16,8 +16,8 @@ const gameIronHackDiver = {
     plant: [],
     plant2: [],
 
-    ejemplo:[],
-    images2:[],
+    ejemplo: [],
+    images2: [],
     seagul: undefined,
     waves: undefined,
     bubbles: [],
@@ -27,7 +27,12 @@ const gameIronHackDiver = {
     },
     playerLifes: 3,
     score: 0,
-
+    ratioWidth: 1.8,
+    ratioHeigth: 1.8,
+    ratioPosX: 1.8,
+    ratioPosY: 1.8,
+    ratioSx: 1.8,  // para Bubbles // drawEquina() //drawLogoDiver
+    ratioSy: 1.8,
 
 
 
@@ -47,8 +52,8 @@ const gameIronHackDiver = {
 
     },
     setDimensions() {
-        this.canvasSize.w = 1921   *1.8         //window.innerWidth             // no aplicar ratio
-        this.canvasSize.h = 1004     *1.8        //window.innerHeight           // no aplicar ratio
+        this.canvasSize.w = 1921 * 1.8         //window.innerWidth             // no aplicar ratio
+        this.canvasSize.h = 1004 * 1.8        //window.innerHeight           // no aplicar ratio
         this.canvasDom.setAttribute('width', this.canvasSize.w)
         this.canvasDom.setAttribute('height', this.canvasSize.h)
     },
@@ -72,9 +77,9 @@ const gameIronHackDiver = {
         this.setEventHandlers()
         this.interval = setInterval(() => {
             this.framesCounter > 5000 ? this.framesCounter = 0 : this.framesCounter++
-            
+
             this.clearAll()
-            this.clearPlant2()
+            this.createPlant2()
             this.createEnemy()
             this.createPlant()
             this.createBubbles()
@@ -96,12 +101,12 @@ const gameIronHackDiver = {
 
     reset() {
 
-        this.backGround = new Background(this.ctx, 0, 20 * 1.8 , this.canvasSize.w, this.canvasSize.h, this.canvasSize)
-        this.waves = new Waves(this.ctx, 0, 230 * 1.8, this.canvasSize.w, 20 * 1.8 , this.canvasSize, 2)
+        this.backGround = new Background(this.ctx, 0, 20 * 1.8, this.canvasSize.w, this.canvasSize.h, this.canvasSize)
+        this.waves = new Waves(this.ctx, 0, 230 * 1.8, this.canvasSize.w, 20 * 1.8, this.canvasSize, 2)
 
         this.createPlayer()
         setTimeout(() => {
-            //this.drawGameOverScreen()
+            this.drawGameOverScreen()
         }, 60000)               // ver el tiempo de duración del juego
     },
 
@@ -120,122 +125,112 @@ const gameIronHackDiver = {
 
         this.backGround.draw()
         this.drawEsquina()
-        this.plant2.forEach(elm => elm.draw())   
+        this.plant2.forEach(elm => elm.draw())
         this.player.draw(this.framesCounter)
-        this.enemyLevel1.forEach(elm => elm.draw())
-        this.enemyLevel2.forEach(elm => elm.draw())
+        this.enemyLevel1.forEach(elm => elm.draw(this.framesCounter))
+        this.enemyLevel2.forEach(elm => elm.draw(this.framesCounter))
         this.player.attackOne.forEach((elm) => {
             elm.draw()
         })
         this.plant.forEach(elm => elm.draw())
-        
+
         this.drawScore()
-        //this.drawRemainingAnchers()
-        
+        this.drawRemainingAnchers()
+
         this.drawLifeBar()
         this.drawLogoDiver()
-        
+
         this.bubbles.forEach(elm => elm.draw())
         this.seagul.draw()
         this.waves.draw()
     },
 
     createPlayer() {
-        this.player = new Player(this.ctx, 20 * 1.8, 230 * 1.8, 260 * 1.8, 420 * 1.8 , this.canvasSize, this.playerLifes)
+        this.player = new Player(this.ctx, 20 * this.ratioPosX, 230 * this.ratioPosY, 260 * this.ratioWidth, 420 * this.ratioHeigth, this.canvasSize, this.playerLifes)
         this.remainAttacksOne = this.player.maxAttackOne
     },
 
     createEnemy() {
 
-        const imgUrlA = `../img/enemy_level_1_A.png`
-        const imgUrlB = `../img/enemy_level_2_A.png`
-
         const x = this.canvasSize.w - 130;
         const framesLimitLevel1A = (Math.floor(Math.random() * 10)) * 80;
         const framesLimitLevel2 = (Math.floor(Math.random() * 10)) * 100;
 
+
+
         if (this.framesCounter % framesLimitLevel1A === 0) {
-            this.enemyLevel1.push(new Enemy(this.ctx, x, 600 * 1.8, (260 * .80) * 1.8, (420 * .8) * 1.8 , imgUrlA, this.canvasSize, null, 3))
+            this.enemyLevel1.push(new Enemy(this.ctx, x, 600 * this.ratioPosY, (260 * .80) * this.ratioWidth, (420 * .8) * this.ratioHeigth, this.canvasSize, null, 3, '../img/enemy_level_1_A_walk.png'))
+        }                                           
+        if (this.framesCounter % framesLimitLevel1A === 0) {
+            this.enemyLevel1.push(new Enemy(this.ctx, x, 520 * this.ratioPosY, (260 * .80) * this.ratioWidth, (420 * .8) * this.ratioHeigth,  this.canvasSize, null, 5, '../img/enemy_level_1_A_walk.png'))
         }
-        if (this.framesCounter % framesLimitLevel1A === 0) {
-            this.enemyLevel1.push(new Enemy(this.ctx, x, 520 * 1.8, (260 * .80) * 1.8, (420 * .8) * 1.8 , imgUrlA, this.canvasSize, null, 5))
+        if (this.framesCounter % framesLimitLevel2 === 0) {
+            this.enemyLevel2.push(new Enemy(this.ctx, x, 270 * this.ratioPosY, 284 * this.ratioWidth, 189 * this.ratioHeigth,  this.canvasSize, null, 7, '../img/enemy_level_2_walk.png'))
+        }
+        if (this.framesCounter % framesLimitLevel2 === 0) {
+            this.enemyLevel2.push(new Enemy(this.ctx, x, 400 * this.ratioPosY, 284 * this.ratioWidth, 189 * this.ratioHeigth,  this.canvasSize, null, 5, '../img/enemy_level_2_walk.png'))
         }
 
-        if (this.framesCounter % framesLimitLevel2 === 0) {
-            this.enemyLevel2.push(new Enemy(this.ctx, x, 270 * 1.8, 284 * 1.8, 189 * 1.8 , imgUrlB, this.canvasSize, null, 7))
-        }
-        if (this.framesCounter % framesLimitLevel2 === 0) {
-            this.enemyLevel2.push(new Enemy(this.ctx, x, 400 * 1.8 , 284 * 1.8 , 189 * 1.8 , imgUrlB, this.canvasSize, null, 5))
-        }
 
     },
+
     createPlant() {
-
-        const x = this.canvasSize.w * 1.8 ;
+        const x = this.canvasSize.w * 1.8;
         const framesplantA = (Math.floor(Math.random() * 10)) * 30;
-
-
-
         if (this.framesCounter % framesplantA === 0) {
-            this.plant2.push(new Decoration(this.ctx, x, 710 * 1.8, 70 * 1.8, 60 * 1.8 , this.canvasSize, 4))
+            this.plant2.push(new Decoration(this.ctx, x, 710 * this.ratioPosY, 70 * this.ratioWidth, 60 * this.ratioHeigth, this.canvasSize, 4))
         }
         if (this.framesCounter % framesplantA === 0) {
-            this.plant2.push(new Decoration(this.ctx, x, 725 * 1.8 , 100 * 1.8 , 90 * 1.8 , this.canvasSize, 6))
+            this.plant2.push(new Decoration(this.ctx, x, 725 * this.ratioPosY, 100 * this.ratioWidth, 90 * this.ratioHeigth, this.canvasSize, 6))
         }
     },
     createPlant2() {
-
-        const x = this.canvasSize.w * 1.8 ;
+        const x = this.canvasSize.w * 1.8;
         const framesplantA = (Math.floor(Math.random() * 10)) * 30;
-
-
-
         if (this.framesCounter % framesplantA === 0) {
-            this.plant.push(new Decoration(this.ctx, x, 840 * 1.8, 250 * 1.8, 150 * 1.8 , this.canvasSize, 8))
+            this.plant.push(new Decoration(this.ctx, x, 840 * this.ratioPosY, 250 * this.ratioWidth, 150 * this.ratioHeigth, this.canvasSize, 8))
         }
-
-
     },
+
     createSeagul() {
-        this.seagul = new Seagul(this.ctx, 1500 * 1.8, 20 * 1.8, 440 * 1.8, 150 * 1.8 , this.canvasSize, 2)
-        console.log(`gaviotoooo`)
+        this.seagul = new Seagul(this.ctx, 1500 * this.ratioPosX, 20 * this.ratioPosY, 440 * this.ratioWidth, 150 * this.ratioHeigth, this.canvasSize, 2)
+
     },
     createWaves() {
-        this.waves = new Waves(this.ctx, 0, 230 * 1.8 , this.canvasSize.w, 20 * 1.8 , this.canvasSize, 2)
-
+        this.waves = new Waves(this.ctx, 0, 230 * this.ratioPosY, this.canvasSize.w, 20 * this.ratioHeigth, this.canvasSize, 2)
     },
 
     createBubbles() {
-        const y = this.canvasSize.h * 1.8 ;
+        const y = this.canvasSize.h * 1.8;
         const framesBubA = (Math.floor(Math.random() * 15)) * 60;
 
         if (this.framesCounter % framesBubA === 0) {
-            this.bubbles.push(new Bubbles(this.ctx, 800 * 1.8, 473 * 1.8, 90 * 1.8, 90 * 1.8 , this.canvasSize, 5))
+            this.bubbles.push(new Bubbles(this.ctx, 800 * this.ratioPosX, 473 * this.ratioPosY, 90 * this.ratioWidth, 90 * this.ratioHeigth, this.canvasSize, 3.5))
         }
         if (this.framesCounter % framesBubA === 0) {
-            this.bubbles.push(new Bubbles(this.ctx, 200 * 1.8, 773 * 1.8, 30 * 1.8, 30 * 1.8 , this.canvasSize, 1))
+            this.bubbles.push(new Bubbles(this.ctx, 200 * this.ratioPosX, 773 * this.ratioPosY, 30 * this.ratioWidth, 30 * this.ratioHeigth, this.canvasSize, 1))
         }
         if (this.framesCounter % framesBubA === 0) {
-            this.bubbles.push(new Bubbles(this.ctx, 1400 * 1.8, 673 * 1.8, 30 * 1.8, 30 * 1.8 , this.canvasSize, 4))
+            this.bubbles.push(new Bubbles(this.ctx, 1400 * this.ratioPosX, 673 * this.ratioPosY, 30 * this.ratioWidth, 30 * this.ratioHeigth, this.canvasSize, 2.5))
         }
         if (this.framesCounter % framesBubA === 0) {
-            this.bubbles.push(new Bubbles(this.ctx, 600 * 1.8 , 973 * 1.8 , 40 * 1.8 , 40 * 1.8 , this.canvasSize, 2))
+            this.bubbles.push(new Bubbles(this.ctx, 600 * this.ratioPosX, 973 * this.ratioPosY, 40 * this.ratioWidth, 40 * this.ratioHeigth, this.canvasSize, 2))
         }
         if (this.framesCounter % framesBubA === 0) {
-            this.bubbles.push(new Bubbles(this.ctx, 1800 * 1.8, 973 * 1.8, 70 * 1.8, 70 * 1.8 , this.canvasSize, 3))
+            this.bubbles.push(new Bubbles(this.ctx, 1800 * this.ratioPosX, 973 * this.ratioPosY, 70 * this.ratioWidth, 70 * this.ratioHeigth, this.canvasSize, 3))
         }
     },
     initImages() {
         const esquinaImg = new Image()
         esquinaImg.src = '../img/faro.png';
         this.ejemplo.push(esquinaImg)
-   console.log(`faro`)
+        console.log(`faro`)
     },
 
-     drawEsquina() {
-         this.ctx.drawImage(this.ejemplo[0], 1600 * 1.8, 55 * 1.8, 320 * 1.8, 200 * 1.8 )
-     },
-   
+    drawEsquina() {
+        this.ctx.drawImage(this.ejemplo[0], 1600 * this.ratioPosX, 55 * this.ratioPosY, 320 * this.ratioWidth, 200 * this.ratioHeigth)
+    },
+
     //LOGO DIVER
     initImages2() {
         const lifeBarImg = new Image()
@@ -244,30 +239,30 @@ const gameIronHackDiver = {
     },
     drawLogoDiver() {
         const lifeWidth = 30;
-        this.ctx.drawImage(this.images2[0], 90 * 1.8, 10 * 1.8, (lifeWidth * 3) * 1.8 , 90 * 1.8 )
+        this.ctx.drawImage(this.images2[0], 90 * this.ratioPosX, 10 * this.ratioPosY, (lifeWidth * 3) * this.ratioWidth, 90 * this.ratioHeigth)
     },
     //DRAW LIFE BAR
     drawLifeBar() {
-        const lifeWidth = 100 * 1.8 ;
+        const lifeWidth = 100 * 1.8;
         this.ctx.fillStyle = 'white'
-        this.ctx.fillRect(180 * 1.8, 50 * 1.8, (lifeWidth * 3) * 1.8, 40 * 1.8 )
+        this.ctx.fillRect(180 * this.ratioPosX, 50 * this.ratioPosY, (lifeWidth * 3) * this.ratioWidth, 40 * this.ratioHeigth)
         this.ctx.fillStyle = '#91AB91'
-        this.ctx.fillRect(140 * 1.8, 50 * 1.8, (lifeWidth * this.playerLifes) * 1.8, 40 * 1.8 )
+        this.ctx.fillRect(140 * 1.8, 50 * this.ratioPosY, (lifeWidth * this.playerLifes) * this.ratioWidth, 40 * this.ratioHeigth)
     },
     drawScore() {
         const scoreText = `Score : ${this.score}`
         this.ctx.fillStyle = 'black'
         this.ctx.font = '90px arial'
-        this.ctx.fillText(scoreText, 800 * 1.8, 70 * 1.8 )
+        this.ctx.fillText(scoreText, 800 * this.ratioPosX, 70 * this.ratioPosY)
     },
-    drawRemainingAnchers(){
+    drawRemainingAnchers() {
         const ancherImage = new Image()
-        ancherImage.src = `../img/ancher.png` 
-        this.ctx.drawImage(ancherImage, 1100 * 1.8, 20 * 1.8, 100, 100)
+        ancherImage.src = `../img/ancher.png`
+        this.ctx.drawImage(ancherImage, 1100 * this.ratioPosX, 20 * this.ratioPosY, 100, 100)
         const remainingAncherText = `${this.remainAttacksOne}`
         this.ctx.fillStyle = 'black'
         this.ctx.font = '90px arial'
-        this.ctx.fillText(remainingAncherText, 1180 * 1.8, 65 * 1.8)
+        this.ctx.fillText(remainingAncherText, 1180 * this.ratioPosX, 65 * this.ratioPosY)
     },
 
 
@@ -348,7 +343,7 @@ const gameIronHackDiver = {
                 ) {
                     enemies.splice(i, 1)
                     this.score += 30
-                
+
                 }
             });
         }
@@ -375,7 +370,7 @@ const gameIronHackDiver = {
 
         })
     },
-    drawGameOverScreen(){
+    drawGameOverScreen() {
         clearInterval(this.interval)
         setTimeout(() => {
             this.clearAll()
@@ -383,16 +378,20 @@ const gameIronHackDiver = {
             this.drawEsquina()
             this.drawScore()
             const scoreText = `GAME OVER!!`
-            this.ctx.fillStyle = 'red'
-            this.ctx.font = '300px arial'
+            this.ctx.fillStyle = `white`
+            this.ctx.font = `300px arial`
             this.ctx.fillText(scoreText, 800, 900)
+            const scoreNum = `Your Score: ${this.score}`
+            this.ctx.fillStyle = `black`
+            this.ctx.font = `150px arial`
+            this.ctx.fillText(scoreNum, 1500, 1100)
         }, 4)
     },
 
     gameOver() {
         if (this.playerLifes === 0) {
-            //this.drawGameOverScreen()
-            clearInterval(this.interval)
+            this.drawGameOverScreen()
+            // clearInterval(this.interval)
         }
     },
 
@@ -411,28 +410,28 @@ const gameIronHackDiver = {
             key === `ArrowRight` ? this.player.moveRight() : null
             key === `ArrowLeft` ? this.player.moveLeft() : null
             if (key === 'ArrowUp' && this.player.isMovingUp === false) {
-                this.player.moveUp() 
+                this.player.moveUp()
                 this.player.isMovingUp = true
                 setTimeout(() => {
                     this.player.isMovingUp = false
                 }, 200)
             }
             key === `ArrowDown` ? this.player.moveDown() : null
-            if(key === ` ` && this.player.canShoot === true) {
+            if (key === ` ` && this.player.canShoot === true) {
                 this.remainAttacksOne = this.player.shoot()
-                if(this.remainAttacksOne === 0){
+                if (this.remainAttacksOne === 0) {
                     this.player.canShoot = false
                     setTimeout(() => {
                         this.remainAttacksOne = this.player.resetShoot()
                         this.player.canShoot = true
-                    }, 10000)
+                    }, 1000)
                 }
             }
             if (key === `w` && this.player.attackTwo === false) {
                 this.player.attackTwo = true
                 setTimeout(() => {
                     this.player.attackTwo = false
-                }, 200)
+                }, 100)
             }
 
 
@@ -448,5 +447,5 @@ const gameIronHackDiver = {
 
     ///////////////////////////////////////////////////////////////////////////////////////////////////
 
-    
+
 }
