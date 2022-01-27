@@ -15,7 +15,7 @@ const gameIronHackDiver = {
     enemyLevel2: [],
     plant: [],
     plant2: [],
-    
+
     ejemplo:[],
     images2:[],
     seagul: undefined,
@@ -47,8 +47,8 @@ const gameIronHackDiver = {
 
     },
     setDimensions() {
-        this.canvasSize.w = 1921   *1.8         //window.innerWidth
-        this.canvasSize.h = 1004     *1.8        //window.innerHeight
+        this.canvasSize.w = 1921   *1.8         //window.innerWidth             // no aplicar ratio
+        this.canvasSize.h = 1004     *1.8        //window.innerHeight           // no aplicar ratio
         this.canvasDom.setAttribute('width', this.canvasSize.w)
         this.canvasDom.setAttribute('height', this.canvasSize.h)
     },
@@ -101,8 +101,7 @@ const gameIronHackDiver = {
 
         this.createPlayer()
         setTimeout(() => {
-            clearInterval(this.interval)
-            alert('GAME OVER')
+            //this.drawGameOverScreen()
         }, 60000)               // ver el tiempo de duración del juego
     },
 
@@ -122,7 +121,7 @@ const gameIronHackDiver = {
         this.backGround.draw()
         this.drawEsquina()
         this.plant2.forEach(elm => elm.draw())   
-        this.player.draw()
+        this.player.draw(this.framesCounter)
         this.enemyLevel1.forEach(elm => elm.draw())
         this.enemyLevel2.forEach(elm => elm.draw())
         this.player.attackOne.forEach((elm) => {
@@ -131,6 +130,7 @@ const gameIronHackDiver = {
         this.plant.forEach(elm => elm.draw())
         
         this.drawScore()
+        //this.drawRemainingAnchers()
         
         this.drawLifeBar()
         this.drawLogoDiver()
@@ -142,6 +142,7 @@ const gameIronHackDiver = {
 
     createPlayer() {
         this.player = new Player(this.ctx, 20 * 1.8, 230 * 1.8, 260 * 1.8, 420 * 1.8 , this.canvasSize, this.playerLifes)
+        this.remainAttacksOne = this.player.maxAttackOne
     },
 
     createEnemy() {
@@ -259,9 +260,14 @@ const gameIronHackDiver = {
         this.ctx.font = '90px arial'
         this.ctx.fillText(scoreText, 800 * 1.8, 70 * 1.8 )
     },
-    drawText(text) {
+    drawRemainingAnchers(){
+        const ancherImage = new Image()
+        ancherImage.src = `../img/ancher.png` 
+        this.ctx.drawImage(ancherImage, 1100 * 1.8, 20 * 1.8, 100, 100)
+        const remainingAncherText = `${this.remainAttacksOne}`
+        this.ctx.fillStyle = 'black'
         this.ctx.font = '90px arial'
-        this.ctx.fillText(text, 100 * 1.8, 100 * 1.8 )
+        this.ctx.fillText(remainingAncherText, 1180 * 1.8, 65 * 1.8)
     },
 
 
@@ -369,10 +375,23 @@ const gameIronHackDiver = {
 
         })
     },
+    drawGameOverScreen(){
+        clearInterval(this.interval)
+        setTimeout(() => {
+            this.clearAll()
+            this.backGround.draw()
+            this.drawEsquina()
+            this.drawScore()
+            const scoreText = `GAME OVER!!`
+            this.ctx.fillStyle = 'red'
+            this.ctx.font = '300px arial'
+            this.ctx.fillText(scoreText, 800, 900)
+        }, 4)
+    },
 
     gameOver() {
         if (this.playerLifes === 0) {
-            this.drawLifeBar()
+            //this.drawGameOverScreen()
             clearInterval(this.interval)
         }
     },
@@ -392,7 +411,7 @@ const gameIronHackDiver = {
             key === `ArrowRight` ? this.player.moveRight() : null
             key === `ArrowLeft` ? this.player.moveLeft() : null
             if (key === 'ArrowUp' && this.player.isMovingUp === false) {
-                this.player.moveUp()
+                this.player.moveUp() 
                 this.player.isMovingUp = true
                 setTimeout(() => {
                     this.player.isMovingUp = false
@@ -400,11 +419,14 @@ const gameIronHackDiver = {
             }
             key === `ArrowDown` ? this.player.moveDown() : null
             if(key === ` ` && this.player.canShoot === true) {
-                this.player.shoot()
-                this.player.canShoot = false;
-                setTimeout(() => {
-                    this.player.canShoot = true
-                }, 1000)
+                this.remainAttacksOne = this.player.shoot()
+                if(this.remainAttacksOne === 0){
+                    this.player.canShoot = false
+                    setTimeout(() => {
+                        this.remainAttacksOne = this.player.resetShoot()
+                        this.player.canShoot = true
+                    }, 10000)
+                }
             }
             if (key === `w` && this.player.attackTwo === false) {
                 this.player.attackTwo = true

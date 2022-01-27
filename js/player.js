@@ -12,21 +12,22 @@ class Player {
         this.imageInstance = undefined
         this.attackImageInstance = undefined
         this.jumpImageInstance=undefined
-        this.attackOne = [] 
-        this.canShoot = true;            // ataque larga distancia
+        this.attackOne = []
+        this.initialMaxAttackOne = 10
+        this.maxAttackOne = this.initialMaxAttackOne
+        this.canShoot = true            // ataque larga distancia
         this.attackTwo = false          // ataque a corta distancia
-        this.lifes = lifes;
+        this.lifes = lifes
         this.isMovingUp = false 
-
-        //  this.imageInstance.frames=3
-        //this.Image.frameIndex = 0
 
         this.init()
     }
     /////INICIALIZAR//
     init() {
         this.imageInstance = new Image()
-        this.imageInstance.src = `../img/player1.png`
+        this.imageInstance.src = `../img/player_walking.png`
+        this.imageInstance.frames = 3
+        this.imageInstance.framesIndex = 0
         this.attackImageInstance = new Image()
         this.attackImageInstance.src = '../img/punch.png'
         this.jumpImageInstance = new Image()
@@ -34,16 +35,51 @@ class Player {
 
     }
     ///CREAR///
-    draw() {
+    draw(framesCounter) {
+
         if (!this.attackTwo && !this.isMovingUp) {
-            this.ctx.drawImage(this.imageInstance, this.playerPos.x, this.playerPos.y, this.playerSize.w, this.playerSize.h)
+            this.ctx.drawImage(
+                this.imageInstance,
+                this.imageInstance.framesIndex * (this.imageInstance.width / this.imageInstance.frames),
+                0,
+                this.imageInstance.width / this.imageInstance.frames,
+                this.imageInstance.height,
+                this.playerPos.x,
+                this.playerPos.y,
+                this.playerSize.w,
+                this.playerSize.h
+            )
+            
         } else if (this.attackTwo) {
-            this.ctx.drawImage(this.attackImageInstance, this.playerPos.x, this.playerPos.y, this.playerSize.w, this.playerSize.h)
+            this.ctx.drawImage(
+                this.attackImageInstance,
+                this.playerPos.x,
+                this.playerPos.y,
+                this.playerSize.w,
+                this.playerSize.h
+            )
         } else if (this.isMovingUp) {
-            this.ctx.drawImage(this.jumpImageInstance, this.playerPos.x, this.playerPos.y, this.playerSize.w, this.playerSize.h)
+            this.ctx.drawImage(
+                this.jumpImageInstance,
+                this.playerPos.x,
+                this.playerPos.y,
+                this.playerSize.w,
+                this.playerSize.h
+            )
         }
+
+        this.animate(framesCounter)
         this.dropDiver()
 
+    }
+    //ANIMATE DIVER
+    animate(framesCounter) {
+        if (framesCounter % 18 == 0) {
+            this.imageInstance.framesIndex++;
+        }
+        if (this.imageInstance.framesIndex >= this.imageInstance.frames) {
+            this.imageInstance.framesIndex = 0;
+        }
     }
     //DROP FOR DEFAULT
     dropDiver() {
@@ -73,9 +109,16 @@ class Player {
     moveDown() {
         this.playerPos.y += 50
     }
-
+    resetShoot(){
+        return this.maxAttackOne = this.initialMaxAttackOne
+    }
     shoot() {
-        this.attackOne.push(new AttackOne(this.ctx, this.playerPos.x + this.playerSize.w, this.playerPos.y + this.playerSize.h / 2, this.playerSize.w * .75, this.playerSize.h / 4, this.gameSize))
+        if(this.canShoot){
+            this.attackOne.push(new AttackOne(this.ctx, this.playerPos.x + this.playerSize.w, this.playerPos.y + this.playerSize.h / 2, this.playerSize.w * .75, this.playerSize.h / 4, this.gameSize))
+            this.maxAttackOne--
+        }
+
+        return this.maxAttackOne
     }
 
     loseLife(){
