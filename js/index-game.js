@@ -15,7 +15,7 @@ const gameIronHackDiver = {
     enemyLevel2: [],
     plant: [],
     plant2: [],
-
+    hasStarted: false,
     ejemplo: [],
     images2: [],
     seagul: undefined,
@@ -25,6 +25,7 @@ const gameIronHackDiver = {
         w: undefined,
         h: undefined
     },
+    starter: undefined,
     playerLifes: 3,
     score: 0,
     ratioWidth: 1.8,
@@ -45,11 +46,12 @@ const gameIronHackDiver = {
     //INICIALIZACION
     init() {
         this.canvasDom = document.getElementById(`canvasIronDiver`)
+        this.canvasDom.addEventListener("click", () => {
+            this.hasStarted = true
+        })
         this.ctx = this.canvasDom.getContext('2d')
         this.setDimensions()
         this.start()
-
-
     },
     setDimensions() {
         this.canvasSize.w = 1921 * 1.8         //window.innerWidth             // no aplicar ratio
@@ -69,32 +71,35 @@ const gameIronHackDiver = {
     //START////
 
     start() {
-
+        this.createStarter()
         this.reset()
         this.initImages()
         this.initImages2()
         this.createSeagul()
         this.setEventHandlers()
         this.interval = setInterval(() => {
-            this.framesCounter > 5000 ? this.framesCounter = 0 : this.framesCounter++
-
-            this.clearAll()
-            this.createPlant2()
-            this.createEnemy()
-            this.createPlant()
-            this.createBubbles()
-            this.drawAll()
-            this.clearEnemy()
-            this.player.clearAttackOne()
-            this.ancherCollision()
-            this.punchCollision()
-            if (this.checkPlayerDamaged()) {
-                this.player.loseLife();
-                this.playerLifes = this.player.lifes
-                this.gameOver();
+            if (this.hasStarted) {
+                this.framesCounter > 5000 ? this.framesCounter = 0 : this.framesCounter++
+                this.clearAll()
+                this.createPlant2()
+                this.createEnemy()
+                this.createPlant()
+                this.createBubbles()
+                this.drawAll()
+                this.clearEnemy()
+                this.player.clearAttackOne()
+                this.ancherCollision()
+                this.punchCollision()
+                if (this.checkPlayerDamaged()) {
+                    this.player.loseLife();
+                    this.playerLifes = this.player.lifes
+                    this.gameOver();
+                }
+                this.clearPlant()
+                this.clearPlant2()
+            } else {
+                this.starter.draw()
             }
-            this.clearPlant()
-            this.clearPlant2()
         }, 1000 / this.FPS)
 
     },
@@ -144,7 +149,9 @@ const gameIronHackDiver = {
         this.seagul.draw()
         this.waves.draw()
     },
-
+    createStarter() {
+        this.starter = new Starter(this.ctx, 1 * this.ratioPosX, 1 * this.ratioPosY, this.canvasSize.w, this.canvasSize.h, this.canvasSize, '../img/starter.png')
+    },
     createPlayer() {
         this.player = new Player(this.ctx, 20 * this.ratioPosX, 230 * this.ratioPosY, 260 * this.ratioWidth, 420 * this.ratioHeigth, this.canvasSize, this.playerLifes)
         this.remainAttacksOne = this.player.maxAttackOne
@@ -160,15 +167,15 @@ const gameIronHackDiver = {
 
         if (this.framesCounter % framesLimitLevel1A === 0) {
             this.enemyLevel1.push(new Enemy(this.ctx, x, 600 * this.ratioPosY, (260 * .80) * this.ratioWidth, (420 * .8) * this.ratioHeigth, this.canvasSize, null, 3, '../img/enemy_level_1_A_walk.png'))
-        }                                           
+        }
         if (this.framesCounter % framesLimitLevel1A === 0) {
-            this.enemyLevel1.push(new Enemy(this.ctx, x, 520 * this.ratioPosY, (260 * .80) * this.ratioWidth, (420 * .8) * this.ratioHeigth,  this.canvasSize, null, 5, '../img/enemy_level_1_A_walk.png'))
+            this.enemyLevel1.push(new Enemy(this.ctx, x, 520 * this.ratioPosY, (260 * .80) * this.ratioWidth, (420 * .8) * this.ratioHeigth, this.canvasSize, null, 5, '../img/enemy_level_1_A_walk.png'))
         }
         if (this.framesCounter % framesLimitLevel2 === 0) {
-            this.enemyLevel2.push(new Enemy(this.ctx, x, 270 * this.ratioPosY, 284 * this.ratioWidth, 189 * this.ratioHeigth,  this.canvasSize, null, 7, '../img/enemy_level_2_walk.png'))
+            this.enemyLevel2.push(new Enemy(this.ctx, x, 270 * this.ratioPosY, 284 * this.ratioWidth, 189 * this.ratioHeigth, this.canvasSize, null, 7, '../img/enemy_level_2_walk.png'))
         }
         if (this.framesCounter % framesLimitLevel2 === 0) {
-            this.enemyLevel2.push(new Enemy(this.ctx, x, 400 * this.ratioPosY, 284 * this.ratioWidth, 189 * this.ratioHeigth,  this.canvasSize, null, 5, '../img/enemy_level_2_walk.png'))
+            this.enemyLevel2.push(new Enemy(this.ctx, x, 400 * this.ratioPosY, 284 * this.ratioWidth, 189 * this.ratioHeigth, this.canvasSize, null, 5, '../img/enemy_level_2_walk.png'))
         }
 
 
@@ -380,11 +387,11 @@ const gameIronHackDiver = {
             const scoreText = `GAME OVER!!`
             this.ctx.fillStyle = `white`
             this.ctx.font = `300px arial`
-            this.ctx.fillText(scoreText, 800, 900)
+            this.ctx.fillText(scoreText, 500, 900)
             const scoreNum = `Your Score: ${this.score}`
             this.ctx.fillStyle = `black`
             this.ctx.font = `150px arial`
-            this.ctx.fillText(scoreNum, 1500, 1100)
+            this.ctx.fillText(scoreNum, 1100, 1100)
         }, 4)
     },
 
