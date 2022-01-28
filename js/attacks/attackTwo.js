@@ -5,13 +5,13 @@ class attackTwo {   // ataque de corta distancia
         this.attackTwoSize = { w: playerWidth, h: playerHeight }
         this.gameSize = gameSize
         this.imageInstance = undefined
-    
+
         this.init()
     }
     init() {
 
         this.imageInstance = new Image()
-        this.imageInstance.src = `../img/punch.png`
+        this.imageInstance.src = `./img/punch.png`
         this.draw()
     }
     draw() {
@@ -21,5 +21,5 @@ class attackTwo {   // ataque de corta distancia
 
     }
 
-    
+
 }

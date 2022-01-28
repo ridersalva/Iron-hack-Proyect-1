@@ -5,7 +5,7 @@ class Bubbles {
         this.bubblesPos = { x: bubblesPosX, y: bubblesPosY };
         this.bubblesVelY = bubblesVelY;
         this.gameSize = gameSize;
-        this.imgsArr = ['../img/burbuja.png', '../img/burbuja2.png']
+        this.imgsArr = ['./img/burbuja.png', './img/burbuja2.png']
         this.imgURl = this.getRandomImg();
         this.bubblesSize = { w: bubblesWidth, h: bubblesHeight };
         this.imageInstance = undefined,
@@ -26,9 +26,9 @@ class Bubbles {
         this.bubblesPos.y -= this.bubblesVelY;
     }
     getRandomImg() {
-       
+
         const imageindex = Math.floor(Math.random() * ((this.imgsArr.length + 1) - 1))
-        
+
         return this.imgsArr[imageindex]
     }
 
