@@ -13,8 +13,6 @@ class Enemy {
         this.attackTwo = []
         this.enemyVelX = enemyVelX
         this.hitPlayer = false // No he golpeado al jugador
-        //  this.imageInstance.frames=3
-        //this.Image.frameIndex = 0
         this.init()
     }
     /////INICIOALIZAR//
@@ -47,7 +45,7 @@ class Enemy {
         }
         this.enemyPos.x -= this.enemyVelX;
     }
-//ANIMATE ENEMY
+    //ANIMATE ENEMY
     animate(framesCounter) {
         if (framesCounter % 10 == 0) {
             this.imageInstance.framesIndex++;
@@ -56,5 +54,4 @@ class Enemy {
             this.imageInstance.framesIndex = 0;
         }
     }
-    checkCollision() { }
 }

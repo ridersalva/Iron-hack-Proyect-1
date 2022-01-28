@@ -19,7 +19,7 @@ class Waves {
     draw() {
         this.ctx.drawImage(this.imageInstance, this.wavePos.x, this.wavePos.y, this.waveSize.w, this.waveSize.h);
         this.ctx.drawImage(this.imageInstance, this.wavePos.x + this.waveSize.w, this.wavePos.y, this.waveSize.w, this.waveSize.h);
-        console.log(`surfsurf`)
+    
         this.move()
 
     }

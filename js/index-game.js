@@ -32,8 +32,9 @@ const gameIronHackDiver = {
     ratioHeigth: 1.8,
     ratioPosX: 1.8,
     ratioPosY: 1.8,
-    ratioSx: 1.8,  // para Bubbles // drawEquina() //drawLogoDiver
+    ratioSx: 1.8,  
     ratioSy: 1.8,
+ 
 
 
 
@@ -48,6 +49,9 @@ const gameIronHackDiver = {
         this.canvasDom = document.getElementById(`canvasIronDiver`)
         this.canvasDom.addEventListener("click", () => {
             this.hasStarted = true
+            let gameSound = new Audio(`../sounds/gameSoundgggg.mp3`)
+            gameSound.play()
+            gameSound.volume = 1
         })
         this.ctx = this.canvasDom.getContext('2d')
         this.setDimensions()
@@ -108,7 +112,7 @@ const gameIronHackDiver = {
 
         this.backGround = new Background(this.ctx, 0, 20 * 1.8, this.canvasSize.w, this.canvasSize.h, this.canvasSize)
         this.waves = new Waves(this.ctx, 0, 230 * 1.8, this.canvasSize.w, 20 * 1.8, this.canvasSize, 2)
-
+       
         this.createPlayer()
         setTimeout(() => {
             this.drawGameOverScreen()
@@ -167,6 +171,7 @@ const gameIronHackDiver = {
 
         if (this.framesCounter % framesLimitLevel1A === 0) {
             this.enemyLevel1.push(new Enemy(this.ctx, x, 600 * this.ratioPosY, (260 * .80) * this.ratioWidth, (420 * .8) * this.ratioHeigth, this.canvasSize, null, 3, '../img/enemy_level_1_A_walk.png'))
+
         }
         if (this.framesCounter % framesLimitLevel1A === 0) {
             this.enemyLevel1.push(new Enemy(this.ctx, x, 520 * this.ratioPosY, (260 * .80) * this.ratioWidth, (420 * .8) * this.ratioHeigth, this.canvasSize, null, 5, '../img/enemy_level_1_A_walk.png'))
@@ -231,7 +236,7 @@ const gameIronHackDiver = {
         const esquinaImg = new Image()
         esquinaImg.src = '../img/faro.png';
         this.ejemplo.push(esquinaImg)
-        console.log(`faro`)
+
     },
 
     drawEsquina() {
@@ -327,6 +332,9 @@ const gameIronHackDiver = {
                     enemies.splice(i, 1)
                     this.player.attackOne.splice(j, 1)
                     this.score += 10
+                    let playerScore = new Audio(`../sounds/impactEnemy.mp3`)
+                    playerScore.play()
+                    playerScore.volume = 1
                 }
             })
         })
@@ -371,6 +379,9 @@ const gameIronHackDiver = {
             ) {
                 hitPlayer = true;
                 elm.hitPlayer = true;
+                let playerHit = new Audio(`../sounds/playerLoselifes.mp3`)
+        playerHit.play()
+        playerHit.volume = 1
             }
 
             return hitPlayer
@@ -393,13 +404,18 @@ const gameIronHackDiver = {
             this.ctx.font = `150px arial`
             this.ctx.fillText(scoreNum, 1100, 1100)
         }, 4)
+       
     },
 
     gameOver() {
         if (this.playerLifes === 0) {
             this.drawGameOverScreen()
-            // clearInterval(this.interval)
+            
+    
         }
+        let gameOver = new Audio(`../sounds/Gameover_sound.mp3`)
+        gameOver.play()
+        gameOver.volume = 0.1
     },
 
 
@@ -419,6 +435,9 @@ const gameIronHackDiver = {
             if (key === 'ArrowUp' && this.player.isMovingUp === false) {
                 this.player.moveUp()
                 this.player.isMovingUp = true
+                let playerJump = new Audio(`../sounds/SALTO.mp3`)
+                playerJump.play()
+                playerJump.volume = 1
                 setTimeout(() => {
                     this.player.isMovingUp = false
                 }, 200)
@@ -426,19 +445,26 @@ const gameIronHackDiver = {
             key === `ArrowDown` ? this.player.moveDown() : null
             if (key === ` ` && this.player.canShoot === true) {
                 this.remainAttacksOne = this.player.shoot()
+                let playerAttackOne = new Audio(`../sounds/impact_long_distance.wav`)
+                playerAttackOne.play()
+                playerAttackOne.volume = 1
                 if (this.remainAttacksOne === 0) {
                     this.player.canShoot = false
                     setTimeout(() => {
                         this.remainAttacksOne = this.player.resetShoot()
                         this.player.canShoot = true
-                    }, 1000)
+                      
+                    }, 10000)
                 }
             }
             if (key === `w` && this.player.attackTwo === false) {
                 this.player.attackTwo = true
+                let playerClose = new Audio(`../sounds/close_attack.mp3`)
+                playerClose.play()
+                playerClose.volume = 1
                 setTimeout(() => {
                     this.player.attackTwo = false
-                }, 100)
+                }, 300)
             }
 
 

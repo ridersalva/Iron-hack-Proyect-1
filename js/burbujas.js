@@ -26,9 +26,9 @@ class Bubbles {
         this.bubblesPos.y -= this.bubblesVelY;
     }
     getRandomImg() {
-        //return Math.floor(Math.random() * (max - min + 1) + min)
+       
         const imageindex = Math.floor(Math.random() * ((this.imgsArr.length + 1) - 1))
-        console.log(imageindex)
+        
         return this.imgsArr[imageindex]
     }
 

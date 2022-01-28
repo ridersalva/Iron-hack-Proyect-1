@@ -11,7 +11,7 @@ class Starter {
 
     draw() {
         this.ctx.drawImage(this.seImageInstance, this.starterPos.x, this.starterPos.y, this.starterSize.w, this.starterSize.h);
-        this.ctx.fillRect(0, 0, 200, 200)
+ 
     }
 
 
