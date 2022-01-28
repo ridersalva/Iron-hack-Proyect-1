@@ -27,9 +27,9 @@ class Decoration {
     }
 
     getRandomImg() {
-        
+
         const imageindex = Math.floor(Math.random() * ((this.imgsArr.length + 1) - 1))
-      
+
         return this.imgsArr[imageindex]
     }
 

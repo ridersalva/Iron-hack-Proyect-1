@@ -32,9 +32,9 @@ const gameIronHackDiver = {
     ratioHeigth: 1.8,
     ratioPosX: 1.8,
     ratioPosY: 1.8,
-    ratioSx: 1.8,  
+    ratioSx: 1.8,
     ratioSy: 1.8,
- 
+
 
 
 
@@ -112,7 +112,7 @@ const gameIronHackDiver = {
 
         this.backGround = new Background(this.ctx, 0, 20 * 1.8, this.canvasSize.w, this.canvasSize.h, this.canvasSize)
         this.waves = new Waves(this.ctx, 0, 230 * 1.8, this.canvasSize.w, 20 * 1.8, this.canvasSize, 2)
-       
+
         this.createPlayer()
         setTimeout(() => {
             this.drawGameOverScreen()
@@ -380,8 +380,8 @@ const gameIronHackDiver = {
                 hitPlayer = true;
                 elm.hitPlayer = true;
                 let playerHit = new Audio(`../sounds/playerLoselifes.mp3`)
-        playerHit.play()
-        playerHit.volume = 1
+                playerHit.play()
+                playerHit.volume = 1
             }
 
             return hitPlayer
@@ -404,14 +404,12 @@ const gameIronHackDiver = {
             this.ctx.font = `150px arial`
             this.ctx.fillText(scoreNum, 1100, 1100)
         }, 4)
-       
+
     },
 
     gameOver() {
         if (this.playerLifes === 0) {
             this.drawGameOverScreen()
-            
-    
         }
         let gameOver = new Audio(`../sounds/Gameover_sound.mp3`)
         gameOver.play()
@@ -453,7 +451,7 @@ const gameIronHackDiver = {
                     setTimeout(() => {
                         this.remainAttacksOne = this.player.resetShoot()
                         this.player.canShoot = true
-                      
+
                     }, 10000)
                 }
             }
